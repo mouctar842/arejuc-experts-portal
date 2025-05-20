@@ -55,7 +55,8 @@
     @apply border-border;
   }
   html {
-    @apply dark; /* Force dark theme */
+    /* Removed @apply dark; as it's not a utility class and causes an error.
+       Dark mode is achieved by default via :root variables or by adding 'dark' class to html tag in index.html */
   }
   body {
     @apply bg-background text-foreground;
@@ -77,3 +78,4 @@
     background: hsl(var(--secondary));
   }
 }
+
