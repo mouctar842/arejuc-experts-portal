@@ -5,22 +5,22 @@ export interface Expert {
   prenom: string;
   photoProfilUrl: string;
   bio: string;
-  cvUrl: string; // URL vers l'image du CV
+  cvUrl: string; // Utilisé pour CV ou Image de certification
+  certificatUrl?: string; // Champ spécifique pour l'image de certification si différent du CV
   specialisationPrincipale: string;
   sousSpecialisations?: string[];
   email: string;
   telephone?: string;
-  moyenneNotes?: number; // Sera calculée plus tard
-  nombreAvis?: number; // Sera calculé plus tard
+  moyenneNotes?: number;
+  nombreAvis?: number;
+  commentaires?: Commentaire[]; // Pour stocker les commentaires côté client
 }
 
-// Pour les commentaires, nous aurons besoin d'un type séparé, à intégrer avec Supabase
 export interface Commentaire {
   id: string;
-  expertId: string;
+  expertId: string; // Lier le commentaire à un expert
   auteur: string;
   contenu: string;
   date: string; // ou Date
   note: number; // de 1 à 5
 }
-

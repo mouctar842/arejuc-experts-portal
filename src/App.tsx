@@ -10,6 +10,8 @@ import Layout from "./components/layout/Layout"; // Import Layout
 import FindExpertPage from "./pages/FindExpertPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import AdminPage from "./pages/AdminPage"; // Nouvelle importation
+import ExpertDetailPage from "./pages/ExpertDetailPage"; // Nouvelle importation
 
 const queryClient = new QueryClient();
 
@@ -23,8 +25,10 @@ const App = () => (
           <Route element={<Layout />}> {/* Wrap routes with Layout */}
             <Route path="/" element={<Index />} />
             <Route path="/trouver-expert" element={<FindExpertPage />} />
+            <Route path="/expert/:id" element={<ExpertDetailPage />} /> {/* Nouvelle route */}
             <Route path="/a-propos" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/admin" element={<AdminPage />} /> {/* Nouvelle route */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Route>
