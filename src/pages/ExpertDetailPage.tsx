@@ -1,23 +1,61 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { mockExperts } from './FindExpertPage'; // Nous utiliserons les données mockées pour l'instant
-import { Expert } from '@/types/expert';
+import { Expert, Commentaire } from '@/types/expert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Mail, Phone, FileText, MessageSquare, Star } from 'lucide-react';
+import { Mail, Phone, FileText, Star } from 'lucide-react';
 import StarRating from '@/components/StarRating';
 import { specializations } from '@/data/specializations';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import CommentForm from '@/components/CommentForm'; // Importer
+import CommentList from '@/components/CommentList'; // Importer
 
-const ExpertDetailPage = () => {
+// Retrait de mockExperts d'ici
+
+interface ExpertDetailPageProps {
+  experts: Expert[];
+  setExperts: React.Dispatch<React.SetStateAction<Expert[]>>;
+}
+
+const ExpertDetailPage: React.FC<ExpertDetailPageProps> = ({ experts, setExperts }) => {
   const { id } = useParams<{ id: string }>();
-  // Trouver l'expert. Dans une vraie application, cela viendrait d'un appel API.
-  // Pour l'instant, nous cherchons dans les mockExperts.
-  // Il faudra rendre mockExperts accessible globalement ou le passer via props/context plus tard
-  // pour que les modifications de l'admin soient reflétées.
-  const expert = mockExperts.find(exp => exp.id === id);
+  const expert = experts.find(exp => exp.id === id);
+
+  const handleAddComment = (auteur: string, contenu: string, note: number) => {
+    if (!expert) return;
+
+    const newComment: Commentaire = {
+      id: String(Date.now() + Math.random().toString(36).substring(2,9)),
+      expertId: expert.id,
+      auteur,
+      contenu,
+      date: new Date().toISOString(),
+      note,
+    };
+
+    const updatedExperts = experts.map(exp => {
+      if (exp.id === expert.id) {
+        const existingCommentaires = exp.commentaires || [];
+        const updatedCommentaires = [...existingCommentaires, newComment];
+        
+        const totalNotes = updatedCommentaires.reduce((sum, c) => sum + c.note, 0);
+        const newMoyenneNotes = updatedCommentaires.length > 0 ? totalNotes / updatedCommentaires.length : undefined;
+        const newNombreAvis = updatedCommentaires.length;
+
+        return {
+          ...exp,
+          commentaires: updatedCommentaires,
+          moyenneNotes: newMoyenneNotes,
+          nombreAvis: newNombreAvis,
+        };
+      }
+      return exp;
+    });
+    setExperts(updatedExperts);
+  };
+
 
   if (!expert) {
     return (
@@ -28,7 +66,6 @@ const ExpertDetailPage = () => {
     );
   }
   
-  // Trouver le nom de la spécialisation principale
   const specialisationPrincipaleNom = specializations.find(s => s.id === expert.specialisationPrincipale)?.nom || expert.specialisationPrincipale;
 
   return (
@@ -53,7 +90,7 @@ const ExpertDetailPage = () => {
 
           <div className="mb-6">
             <h3 className="text-xl font-semibold mb-2 text-primary">Certification</h3>
-            {expert.cvUrl ? ( // cvUrl est utilisé pour la certification ici
+            {expert.cvUrl ? (
                  <Dialog>
                   <DialogTrigger asChild>
                     <img 
@@ -109,15 +146,15 @@ const ExpertDetailPage = () => {
                 </div>
               )}
             </div>
-            {/* Section pour laisser un commentaire et afficher les commentaires existants (à venir) */}
-            <div className="p-4 bg-muted/30 rounded-md min-h-[80px]">
-              <p className="text-sm text-muted-foreground">
-                La section des commentaires et la possibilité de laisser un avis seront bientôt disponibles.
-              </p>
+            
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold mb-3 text-primary">Commentaires Existants</h4>
+              <CommentList commentaires={expert.commentaires || []} />
             </div>
-             <Button variant="link" size="sm" className="mt-3 text-purple-400 hover:text-pink-500 p-0 h-auto" disabled>
-                <MessageSquare className="mr-2 h-4 w-4" /> Laisser un commentaire (bientôt)
-            </Button>
+
+            <div className="mt-6">
+              <CommentForm onSubmit={handleAddComment} />
+            </div>
           </div>
 
         </CardContent>
@@ -127,3 +164,4 @@ const ExpertDetailPage = () => {
 };
 
 export default ExpertDetailPage;
+

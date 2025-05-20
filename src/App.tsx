@@ -1,4 +1,5 @@
 
+import React, { useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,36 +7,51 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Layout from "./components/layout/Layout"; // Import Layout
+import Layout from "./components/layout/Layout";
 import FindExpertPage from "./pages/FindExpertPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
-import AdminPage from "./pages/AdminPage"; // Nouvelle importation
-import ExpertDetailPage from "./pages/ExpertDetailPage"; // Nouvelle importation
+import AdminPage from "./pages/AdminPage";
+import ExpertDetailPage from "./pages/ExpertDetailPage";
+import { Expert } from './types/expert';
+import { mockInitialExperts } from './data/mockInitialExperts'; // Import initial data
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}> {/* Wrap routes with Layout */}
-            <Route path="/" element={<Index />} />
-            <Route path="/trouver-expert" element={<FindExpertPage />} />
-            <Route path="/expert/:id" element={<ExpertDetailPage />} /> {/* Nouvelle route */}
-            <Route path="/a-propos" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/admin" element={<AdminPage />} /> {/* Nouvelle route */}
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [experts, setExperts] = useState<Expert[]>(mockInitialExperts);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route 
+                path="/trouver-expert" 
+                element={<FindExpertPage experts={experts} />} 
+              />
+              <Route 
+                path="/expert/:id" 
+                element={<ExpertDetailPage experts={experts} setExperts={setExperts} />} 
+              />
+              <Route path="/a-propos" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route 
+                path="/admin" 
+                element={<AdminPage experts={experts} setExperts={setExperts} />} 
+              />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
+
