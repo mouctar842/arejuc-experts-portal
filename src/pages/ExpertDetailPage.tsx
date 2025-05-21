@@ -1,18 +1,15 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Expert, Commentaire } from '@/types/expert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription as ShadcnCardDescription } from '@/components/ui/card';
 import { Mail, Phone, FileText, Star } from 'lucide-react';
 import StarRating from '@/components/StarRating';
 import { specializations } from '@/data/specializations';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import CommentForm from '@/components/CommentForm'; // Importer
-import CommentList from '@/components/CommentList'; // Importer
-
-// Retrait de mockExperts d'ici
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import CommentForm from '@/components/CommentForm';
+import CommentList from '@/components/CommentList';
 
 interface ExpertDetailPageProps {
   experts: Expert[];
@@ -56,7 +53,6 @@ const ExpertDetailPage: React.FC<ExpertDetailPageProps> = ({ experts, setExperts
     setExperts(updatedExperts);
   };
 
-
   if (!expert) {
     return (
       <div className="container mx-auto py-12 px-4 text-center min-h-[calc(100vh-12rem)]">
@@ -77,7 +73,7 @@ const ExpertDetailPage: React.FC<ExpertDetailPageProps> = ({ experts, setExperts
             <AvatarFallback>{expert.prenom.charAt(0)}{expert.nom.charAt(0)}</AvatarFallback>
           </Avatar>
           <CardTitle className="text-3xl text-primary">{expert.prenom} {expert.nom}</CardTitle>
-          <CardDescription className="text-lg text-muted-foreground">{specialisationPrincipaleNom}</CardDescription>
+          <ShadcnCardDescription className="text-lg text-muted-foreground">{specialisationPrincipaleNom}</ShadcnCardDescription>
           {expert.sousSpecialisations && expert.sousSpecialisations.length > 0 && (
             <p className="text-sm text-muted-foreground/80 mt-1">{expert.sousSpecialisations.join(', ')}</p>
           )}
@@ -102,6 +98,9 @@ const ExpertDetailPage: React.FC<ExpertDetailPageProps> = ({ experts, setExperts
                   <DialogContent className="sm:max-w-[600px] md:max-w-[800px] bg-background text-foreground p-0">
                     <DialogHeader className="p-6 pb-0">
                       <DialogTitle>Certification de {expert.prenom} {expert.nom}</DialogTitle>
+                      <DialogDescription className="sr-only">
+                        Image en grand format de la certification de {expert.prenom} {expert.nom}.
+                      </DialogDescription>
                     </DialogHeader>
                     <div className="p-6 max-h-[80vh] overflow-y-auto">
                       <img src={expert.cvUrl} alt={`Certification de ${expert.prenom} ${expert.nom}`} className="w-full h-auto rounded-md" />
@@ -156,7 +155,6 @@ const ExpertDetailPage: React.FC<ExpertDetailPageProps> = ({ experts, setExperts
               <CommentForm onSubmit={handleAddComment} />
             </div>
           </div>
-
         </CardContent>
       </Card>
     </div>
@@ -164,4 +162,3 @@ const ExpertDetailPage: React.FC<ExpertDetailPageProps> = ({ experts, setExperts
 };
 
 export default ExpertDetailPage;
-

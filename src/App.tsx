@@ -1,5 +1,5 @@
 
-import React, { useState, Suspense } from 'react'; // Added Suspense
+import React, { useState, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import { Expert } from './types/expert';
 import { mockInitialExperts } from './data/mockInitialExperts';
+import ScrollToTop from './components/utils/ScrollToTop'; // Importer ScrollToTop
 
 // Lazy load page components
 const Index = React.lazy(() => import("./pages/Index"));
@@ -36,6 +37,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop /> {/* Ajouter ScrollToTop ici */}
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route element={<Layout />}>
