@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, ChevronRight } from "lucide-react";
+// ... import Input from "@/components/ui/input"; // No longer needed here
+import { Search, ChevronRight, Users, Lock } from "lucide-react"; // Added Users, Lock
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -10,7 +10,7 @@ const Index = () => {
       {/* Hero Section */}
       <section 
         className="relative py-20 md:py-32 lg:py-48 flex items-center justify-center text-center bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2000&auto=format&fit=crop')" }} // Matrix code image
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2000&auto=format&fit=crop')" }}
       >
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div> {/* Dark overlay with blur */}
         <div className="relative z-10 container px-4 animate-fade-in-up">
@@ -67,22 +67,26 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Direct Search Section */}
-      <section className="py-16 md:py-24 bg-secondary">
+      {/* New Stylish Section - "Rejoignez Notre Communauté" */}
+      <section className="py-16 md:py-24 bg-secondary/70">
         <div className="container px-4 text-center">
-           <h2 className="text-3xl md:text-4xl font-bold mb-4">Recherche Directe par Spécialisation</h2>
-           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-             Accédez rapidement à l'expert qu'il vous faut en sélectionnant une spécialisation.
+           <Users className="mx-auto h-16 w-16 text-purple-400 mb-6" />
+           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Rejoignez Notre Communauté d'Experts</h2>
+           <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-8">
+             AREJUC est plus qu'une association, c'est un réseau de professionnels passionnés, dédiés à l'excellence et au partage de connaissances. Ensemble, faisons progresser l'expertise juridique.
            </p>
-           <div className="max-w-xl mx-auto flex gap-2">
-             <Input type="search" placeholder="Ex: Droit fiscal, Immobilier, Cybercriminalité..." className="flex-grow" />
-             <Button type="submit" size="lg" className="bg-gradient-to-r from-purple-500 to-pink-600 text-white">
-               <Search className="mr-2 h-5 w-5" /> Rechercher
-             </Button>
+           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+             <Link to="/contact">
+                <Button size="lg" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white w-full sm:w-auto">
+                    Devenir Membre
+                </Button>
+             </Link>
+             <Link to="/a-propos">
+                <Button size="lg" variant="outline" className="text-white border-slate-400 hover:bg-white/10 hover:text-white w-full sm:w-auto">
+                    Nos Valeurs
+                </Button>
+            </Link>
            </div>
-           <p className="mt-4 text-sm text-muted-foreground">
-             Cette fonctionnalité sera bientôt entièrement opérationnelle.
-           </p>
         </div>
       </section>
 
@@ -99,11 +103,18 @@ const Index = () => {
             <p>
               Notre mission est de fédérer les experts qualifiés, de faciliter l'accès à leurs services, et de contribuer au développement des compétences juridiques dans la région Centre. Nous mettons un point d'honneur à valoriser le savoir-faire de nos membres pour garantir des prestations de haute qualité.
             </p>
-            <Link to="/a-propos">
-              <Button variant="outline" className="mt-6 text-purple-400 border-purple-400 hover:bg-purple-400/10 hover:text-purple-300">
-                Découvrir notre histoire et nos valeurs
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <Link to="/a-propos">
+                <Button variant="outline" className="text-purple-400 border-purple-400 hover:bg-purple-400/10 hover:text-purple-300 w-full sm:w-auto">
+                    Découvrir notre histoire et nos valeurs
+                </Button>
+                </Link>
+                <Link to="/admin">
+                    <Button className="bg-slate-700 hover:bg-slate-600 text-white w-full sm:w-auto">
+                        <Lock className="mr-2 h-4 w-4" /> Espace Administrateur
+                    </Button>
+                </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -112,3 +123,4 @@ const Index = () => {
 };
 
 export default Index;
+
